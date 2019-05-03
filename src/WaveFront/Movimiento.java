@@ -1,24 +1,25 @@
 package WaveFront;
 
+
 public class Movimiento {
 	static final  int LADO = 6;
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		int jInicio = 5;
-		int iInicio = 3;
-		int jFin = 1;
-		int iFin = 2;
-		//prueba
-		//obstaculo (3,1) (2,3), (1,3) (2,2)
+		int jInicio = 2;
+		int iInicio = 2;
+		int jFin = 5;
+		int iFin = 0;
 		
 		int [][] mapa = new int[LADO][LADO];
+		
 		// -1 obstaculo, -2 vacio, 0 inicio, 100 fin
 		IniciarArreglo(mapa, iInicio, jInicio, iFin, jFin);
 		Wave(mapa, 0);
 		MostrarArreglo(mapa);
-		ruta(mapa, true, 0, 0, 0);
+		ruta(mapa, true, 0, 0);
 		MostrarArreglo(mapa);
+		
 		//100 ruta 444 obstaculo, 777 libre
 		LimpiarArreglo(mapa);
 		MostrarArreglo(mapa);
@@ -41,7 +42,7 @@ public class Movimiento {
 		}
 		
 	}
-	static void ruta(int [][] mapa, boolean bandera, int x, int y, int contador) {
+	static void ruta(int [][] mapa, boolean bandera, int x, int y) {
 		if (bandera) {
 			boolean band = false;
 			int a = 0;
@@ -53,12 +54,11 @@ public class Movimiento {
 						b = j;
 						band = true; 
 						break;
-						//ruta(mapa, false, j, i, contador++);
 					}
 				}
 			}
 			if(band) {
-				ruta(mapa, false, b, a, contador++);
+				ruta(mapa, false, b, a);
 			}
 		}else {
 			int menosx = x-1;
@@ -101,18 +101,18 @@ public class Movimiento {
 					encontrado = true;
 				}
 			}
-			if(menor == 0 || contador > 10) {
+			if(menor == 0) {
 				mapa[menory][menorx] = 100;
 				return;
 			}
 			if(encontrado) {
 				mapa[menory][menorx] = 100;
-				ruta(mapa, false, menorx, menory, contador++);
-				
+				ruta(mapa, false, menorx, menory);
 			}else {
 				return;
 			}
-		}		
+		}
+		return;
 		
 	}
 	static void Wave(int [][] mapa, int num) {
@@ -120,7 +120,7 @@ public class Movimiento {
 		int menosy;
 		int masx;
 		int masy;
-		
+		boolean seguir = false;
 		for(int i = 0; i < LADO; i++) {
 			for(int j = 0 ; j < LADO ; j++) {
 				if(mapa[i][j] == num) {
@@ -134,6 +134,7 @@ public class Movimiento {
 						}else {
 							if(mapa[menosy][j] == -2) {
 								mapa[menosy][j] = num+1;
+								seguir = true;
 							}
 						}
 					}
@@ -143,6 +144,7 @@ public class Movimiento {
 						}else {
 							if(mapa[masy][j] == -2) {
 								mapa[masy][j] = num+1;
+								seguir = true;
 							}
 						}
 					}
@@ -153,6 +155,7 @@ public class Movimiento {
 						}else {
 							if(mapa[i][menosx] == -2) {
 								mapa[i][menosx] = num+1;
+								seguir = true;
 							}
 						}
 					}
@@ -162,13 +165,14 @@ public class Movimiento {
 						}else {
 							if(mapa[i][masx] == -2) {
 								mapa[i][masx] = num+1;
+								seguir = true;
 							}
 						}
 					}		
 				}
 			}
 		}
-		if(num < LADO*LADO) {
+		if(seguir) {
 			Wave(mapa, num+1);
 		}else {
 			return;
@@ -183,9 +187,11 @@ public class Movimiento {
 			}
 		}
 		mapa[3][1] = -1;
+		mapa[0][3] = -1;
 		mapa[1][3] = -1;
 		mapa[2][3] = -1;
 		mapa[3][3] = -1;
+		mapa[3][2] = -1;
 		mapa[xInicio][yInicio] = 0;
 		mapa[xFin][yFin] = 100;
 		MostrarArreglo(mapa);

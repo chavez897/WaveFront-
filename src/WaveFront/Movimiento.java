@@ -9,6 +9,7 @@ public class Movimiento {
 		int iInicio = 3;
 		int jFin = 1;
 		int iFin = 2;
+		//prueba
 		//obstaculo (3,1) (2,3), (1,3) (2,2)
 		
 		int [][] mapa = new int[LADO][LADO];
